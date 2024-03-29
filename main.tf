@@ -22,7 +22,7 @@ resource "digitalocean_droplet" "centos_example" {
   user_data = <<-EOF
     #!/bin/bash
     yum -y update
-    yum -y install squid
+    yum -y install squid httpd-tools
     sudo sed -i '1 i\# blacklist config' /etc/squid/squid.conf
     sudo sed -i '2 i\acl blacklist dstdomain "/etc/squid/blocked.txt"' /etc/squid/squid.conf
     sudo sed -i '/acl Safe_ports port 777/a #ACL Blocklist' /etc/squid/squid.conf
@@ -32,7 +32,6 @@ resource "digitalocean_droplet" "centos_example" {
     sudo bash -c "echo '.examplemalwaredomain.com' > /etc/squid/blocked.txt"
     sudo bash -c "echo .internetbadguys.com >> /etc/squid/blocked.txt"
     sudo bash -c "echo .examplebotnetdomain.com >> /etc/squid/blocked.txt"
-    sudo yum install squid httpd-tools
     sudo systemctl enable squid
     sudo systemctl restart squid
   EOF
